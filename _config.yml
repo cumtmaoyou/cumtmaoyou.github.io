@@ -3,12 +3,12 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: 猫鼬三两记
+title: '猫鼬三两记'
 subtitle: ''
 description: '零零散散的一些想法'
 keywords:
 author: 暴躁小猫鼬
-language: zh_CN
+language: zh-CN
 timezone: 'Asia/Shanghai'
 
 # URL
@@ -97,7 +97,7 @@ ignore:
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: geek
+theme: kaze
 
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
