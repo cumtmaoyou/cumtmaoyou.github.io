@@ -1,4 +1,4 @@
-name: Blog CI
+name: auto_ci
 
 on:
   push:
@@ -11,7 +11,7 @@ env:
   THEME_REPO: sanonz/hexo-theme-concise
   THEME_BRANCH: master
   DEPLOY_REPO: cumtmaoyou/maoyou.github.io
-  DEPLOY_BRANCH: auto_ci
+  DEPLOY_BRANCH: autoci
 
 jobs:
   build:
@@ -38,7 +38,7 @@ jobs:
         with:
           repository: ${{ env.DEPLOY_REPO }}
           ref: ${{ env.DEPLOY_BRANCH }}
-          path: .deploy_git
+          path: autoci.maoyou.github.io
 
       - name: Use Node.js ${{ matrix.node_version }}
         uses: actions/setup-node@v3
