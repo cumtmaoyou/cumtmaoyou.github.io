@@ -8,7 +8,7 @@ on:
 env:
   GIT_USER: cumtmaoyou
   GIT_EMAIL: cumtxiaofeng@live.com
-  THEME_REPO: sanonz/hexo-theme-concise
+  THEME_REPO: sanjinhub/hexo-theme-geek
   THEME_BRANCH: master
   DEPLOY_REPO: cumtmaoyou/cumtmaoyou.github.io
   DEPLOY_BRANCH: autoci
@@ -38,7 +38,7 @@ jobs:
         with:
           repository: ${{ env.DEPLOY_REPO }}
           ref: ${{ env.DEPLOY_BRANCH }}
-          path: autoci.maoyou.github.io
+          path: .autoci
 
       - name: Use Node.js ${{ matrix.node_version }}
         uses: actions/setup-node@v3
