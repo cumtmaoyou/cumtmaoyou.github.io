@@ -3,17 +3,17 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: Hexo
+title: 猫鼬三两记
 subtitle: ''
-description: ''
+description: '零零散散的一些想法'
 keywords:
-author: John Doe
-language: en
-timezone: ''
+author: 暴躁小猫鼬
+language: zh_CN
+timezone: 'Asia/Shanghai'
 
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
-url: http://example.com
+url: https://cumtmaoyou.github.io
 permalink: :year/:month/:day/:title/
 permalink_defaults:
 pretty_urls:
@@ -102,4 +102,5 @@ theme: landscape
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
-  type: ''
+  type: 'git'
+  repo: git@github.com:cumtmaoyou/cumtmaoyou.github.io.git
