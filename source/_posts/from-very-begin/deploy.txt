@@ -1,55 +1,55 @@
-name: auto_ci # ActionµÄÃû×Ö
+name: auto_ci # Actionçš„åå­—
 
-# µ±ÍÆËÍµ½master·ÖÖ§µÄÊ±ºò³ö·¢¸ÃAction
+# å½“æ¨é€åˆ°masteråˆ†æ”¯çš„æ—¶å€™å‡ºå‘è¯¥Action
 on:
   push:
     branches:
       - master
 
-# »·¾³±äÁ¿ÉèÖÃ
+# ç¯å¢ƒå˜é‡è®¾ç½®
 env:
-  GIT_USER: cumtmaoyou #githubÕËºÅ
-  GIT_EMAIL: cumtxiaofeng@live.com #githubÓÊÏä
-  THEME_REPO: next-theme/hexo-theme-next #µ±Ç°Ê¹ÓÃµÄHexoµÄÖ÷Ìârepo
-  THEME_BRANCH: master # Ö÷ÌâµÄrepo·ÖÖ§Ãû³Æ
-  DEPLOY_REPO: cumtmaoyou/cumtmaoyou.github.io #×Ô¶¯²¿Êğµ½¸Ãrepo
-  DEPLOY_BRANCH: autoci #×Ô¶¯²¿ÊğµÄrepoµÄ·ÖÖ§Ãû³Æ
+  GIT_USER: cumtmaoyou #githubè´¦å·
+  GIT_EMAIL: cumtxiaofeng@live.com #githubé‚®ç®±
+  THEME_REPO: next-theme/hexo-theme-next #å½“å‰ä½¿ç”¨çš„Hexoçš„ä¸»é¢˜repo
+  THEME_BRANCH: master # ä¸»é¢˜çš„repoåˆ†æ”¯åç§°
+  DEPLOY_REPO: cumtmaoyou/cumtmaoyou.github.io #è‡ªåŠ¨éƒ¨ç½²åˆ°è¯¥repo
+  DEPLOY_BRANCH: autoci #è‡ªåŠ¨éƒ¨ç½²çš„repoçš„åˆ†æ”¯åç§°
 
-# ÈÎÎñÁĞ±í
+# ä»»åŠ¡åˆ—è¡¨
 jobs:
   build:
-    name: Build on node ${{ matrix.node_version }} and ${{ matrix.os }} #±àÒëµÄÃû³Æ matri.node_versionºÍmatrix.osÒıÓÃµÄÏÂ·½µÄµÄosºÍnode_versionµÄÅäÖÃ
-    runs-on: ubuntu-latest # ±íÃ÷ÔÚubuntuÉÏ±àÒë
+    name: Build on node ${{ matrix.node_version }} and ${{ matrix.os }} #ç¼–è¯‘çš„åç§° matri.node_versionå’Œmatrix.oså¼•ç”¨çš„ä¸‹æ–¹çš„çš„oså’Œnode_versionçš„é…ç½®
+    runs-on: ubuntu-latest # è¡¨æ˜åœ¨ubuntuä¸Šç¼–è¯‘
     strategy:
       matrix:
-        os: [ubuntu-latest] # ÏµÍ³ÓÃ×îĞÂµÄubuntu
-        node_version: [16.x] # nodeÓÃ16.x°æ±¾
+        os: [ubuntu-latest] # ç³»ç»Ÿç”¨æœ€æ–°çš„ubuntu
+        node_version: [16.x] # nodeç”¨16.xç‰ˆæœ¬
 
-    # ±àÒë²½Öè
+    # ç¼–è¯‘æ­¥éª¤
     steps:
-      - name: Checkout # Ê×ÏÈÊÇcheckout¸Ãdeploy.ymlËùÔÚµÄ²Ö¿â
+      - name: Checkout # é¦–å…ˆæ˜¯checkoutè¯¥deploy.ymlæ‰€åœ¨çš„ä»“åº“
         uses: actions/checkout@v3
 
-      - name: Checkout theme repo # checkoutÖ÷Ìâ²Ö¿â
+      - name: Checkout theme repo # checkoutä¸»é¢˜ä»“åº“
         uses: actions/checkout@v3
         with:
           repository: ${{ env.THEME_REPO }}
           ref: ${{ env.THEME_BRANCH }}
-          path: themes/next # checkµ½themes/nextÎÄ¼ş¼ĞÏÂ£¬Õâ¸öÎÄ¼ş¼ĞÓëµÚÒ»²½Ëùcheck²Ö¿âµÄ¸ùÄ¿Â¼µÄÍ¬¼¶
+          path: themes/next # checkåˆ°themes/nextæ–‡ä»¶å¤¹ä¸‹ï¼Œè¿™ä¸ªæ–‡ä»¶å¤¹ä¸ç¬¬ä¸€æ­¥æ‰€checkä»“åº“çš„æ ¹ç›®å½•çš„åŒçº§
 
-      - name: Checkout deploy repo #checkout²¿Êğ²Ö¿â
+      - name: Checkout deploy repo #checkoutéƒ¨ç½²ä»“åº“
         uses: actions/checkout@v3
         with:
           repository: ${{ env.DEPLOY_REPO }}
           ref: ${{ env.DEPLOY_BRANCH }}
-          path: .autoci #checkµ½.autociÎÄ¼ş¼Ğ£¬Õâ¸öÎÄ¼ş¼ĞÓëµÚÒ»²½Ëùcheck²Ö¿âµÄ¸ùÄ¿Â¼µÄÍ¬¼¶
+          path: .autoci #checkåˆ°.autociæ–‡ä»¶å¤¹ï¼Œè¿™ä¸ªæ–‡ä»¶å¤¹ä¸ç¬¬ä¸€æ­¥æ‰€checkä»“åº“çš„æ ¹ç›®å½•çš„åŒçº§
 
-      - name: Use Node.js ${{ matrix.node_version }} # °²×°node
+      - name: Use Node.js ${{ matrix.node_version }} # å®‰è£…node
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node_version }}
 
-      - name: Configuration environment # ÅäÖÃ×Ô¶¯²¿Êğ»·¾³
+      - name: Configuration environment # é…ç½®è‡ªåŠ¨éƒ¨ç½²ç¯å¢ƒ
         env:
           HEXO_DEPLOY_PRI: ${{secrets.HEXO_DEPLOY_PRI}}
         run: |
@@ -60,11 +60,11 @@ jobs:
           ssh-keyscan github.com >> ~/.ssh/known_hosts
           git config --global user.name $GIT_USER
           git config --global user.email $GIT_EMAIL
-      #          cp .config.next.yml themes/next/_config.yml #Õâ±ß¿ÉÒÔ¸´ÖÆÒ»Ğ©¶îÍâµÄ×Ô¶¨ÒåÎÄ¼şµ½Ö÷Ìâ
-      - name: Install dependencies # Ö´ĞĞnode install
+      #          cp .config.next.yml themes/next/_config.yml #è¿™è¾¹å¯ä»¥å¤åˆ¶ä¸€äº›é¢å¤–çš„è‡ªå®šä¹‰æ–‡ä»¶åˆ°ä¸»é¢˜
+      - name: Install dependencies # æ‰§è¡Œnode install
         run: |
           npm install
 
-      - name: Deploy hexo # Ö´ĞĞhexoµÄdeployÃüÁî
+      - name: Deploy hexo # æ‰§è¡Œhexoçš„deployå‘½ä»¤
         run: |
           npm run deploy
