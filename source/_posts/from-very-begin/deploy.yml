@@ -1,0 +1,70 @@
+name: auto_ci # Action的名字
+
+# 当推送到master分支的时候出发该Action
+on:
+  push:
+    branches:
+      - master
+
+# 环境变量设置
+env:
+  GIT_USER: cumtmaoyou #github账号
+  GIT_EMAIL: cumtxiaofeng@live.com #github邮箱
+  THEME_REPO: next-theme/hexo-theme-next #当前使用的Hexo的主题repo
+  THEME_BRANCH: master # 主题的repo分支名称
+  DEPLOY_REPO: cumtmaoyou/cumtmaoyou.github.io #自动部署到该repo
+  DEPLOY_BRANCH: autoci #自动部署的repo的分支名称
+
+# 任务列表
+jobs:
+  build:
+    name: Build on node ${{ matrix.node_version }} and ${{ matrix.os }} #编译的名称 matri.node_version和matrix.os引用的下方的的os和node_version的配置
+    runs-on: ubuntu-latest # 表明在ubuntu上编译
+    strategy:
+      matrix:
+        os: [ubuntu-latest] # 系统用最新的ubuntu
+        node_version: [16.x] # node用16.x版本
+
+    # 编译步骤
+    steps:
+      - name: Checkout # 首先是checkout该deploy.yml所在的仓库
+        uses: actions/checkout@v3
+
+      - name: Checkout theme repo # checkout主题仓库
+        uses: actions/checkout@v3
+        with:
+          repository: ${{ env.THEME_REPO }}
+          ref: ${{ env.THEME_BRANCH }}
+          path: themes/next # check到themes/next文件夹下，这个文件夹与第一步所check仓库的根目录的同级
+
+      - name: Checkout deploy repo #checkout部署仓库
+        uses: actions/checkout@v3
+        with:
+          repository: ${{ env.DEPLOY_REPO }}
+          ref: ${{ env.DEPLOY_BRANCH }}
+          path: .autoci #check到.autoci文件夹，这个文件夹与第一步所check仓库的根目录的同级
+
+      - name: Use Node.js ${{ matrix.node_version }} # 安装node
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node_version }}
+
+      - name: Configuration environment # 配置自动部署环境
+        env:
+          HEXO_DEPLOY_PRI: ${{secrets.HEXO_DEPLOY_PRI}}
+        run: |
+          sudo timedatectl set-timezone "Asia/Shanghai"
+          mkdir -p ~/.ssh/
+          echo "$HEXO_DEPLOY_PRI" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          git config --global user.name $GIT_USER
+          git config --global user.email $GIT_EMAIL
+      #          cp .config.next.yml themes/next/_config.yml #这边可以复制一些额外的自定义文件到主题
+      - name: Install dependencies # 执行node install
+        run: |
+          npm install
+
+      - name: Deploy hexo # 执行hexo的deploy命令
+        run: |
+          npm run deploy
