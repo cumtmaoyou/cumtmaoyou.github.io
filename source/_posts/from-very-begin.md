@@ -29,7 +29,7 @@ tags:
 - 通过仓库的`Settings -> Secrets -> Add a new secret`菜单，添加一个新的Secret，Name可以自己取，这边用HEXO_DEPLOY_PRI，Value使用github-deploy-key文件的内容
 - 通过仓库的`Settings -> Deploy Keys -> Add Deploy Key`菜单，添加新的Deploy Key，Title可以自己取，这边用HEXO_DEPLOY_PUB，Key使用github-deploy-key.pub文件的内容，添加的时候记得勾选上Allow write access
 3. 添加部署配置
-在hexo站点根目录下依次创建`.github`, `workflows`文件夹，并在workflows文件夹中创建deploy.yml`，<a href="{% asset_path deploy.yml %}">点击查看</a>yml的内容
+在hexo站点根目录下依次创建`.github`, `workflows`文件夹，并在workflows文件夹中创建deploy.yml`，<a href="{% asset_path deploy.txt %}">点击查看</a>yml的内容
 4. 修改Hexo的配置文件_config.yml
 ```
 deploy:
