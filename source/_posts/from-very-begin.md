@@ -4,8 +4,9 @@ abbrlink: 13d30382
 date: 2022-05-11 15:17:01
 categories:
  - 记录生活
+ - Hexo
 tags:
- - Green
+ - 博客
 ---
 ## 源起
 我在自己服务器上搭建的Typecho博客被备案这种事情折腾得头疼，终于忍不住放弃了；又见识了各种各样通过GithubPages创建的博客，终于忍不住想要试试Hexo。

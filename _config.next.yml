@@ -624,7 +624,7 @@ livere_uid: # <your_uid>
 gitalk:
   enable: true
   github_id: cumtmaoyou # GitHub repo owner
-  repo: https://github.com/cumtmaoyou/cumtmaoyou.github.io # Repository name to store issues
+  repo: cumtmaoyou.github.io # Repository name to store issues
   client_id: 394c5aef09ece1d61b44 # GitHub Application Client ID
   client_secret: b913394a03da1faa03ca72dcc4f3b269e23948f1 # GitHub Application Client Secret
   admin_user: cumtmaoyou # GitHub repo owner and collaborators, only these guys can initialize gitHub issues
