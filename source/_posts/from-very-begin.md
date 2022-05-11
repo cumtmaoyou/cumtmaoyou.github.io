@@ -3,10 +3,10 @@ title: 从一开始
 abbrlink: 13d30382
 date: 2022-05-11 15:17:01
 categories:
- - 记录生活
+ - 折腾小记
  - Hexo
 tags:
- - 博客
+ - Hexo
 ---
 
 ## 0x00.源起
@@ -17,6 +17,8 @@ tags:
 
 ### 环境
 这部分比较简单，跟着官方文档来，安装[nodejs](https://nodejs.org/en)，完成后执行`nmp install -g hexo-cli`，简单两步环境就好了。接下来是创建一个文件夹，在新建的文件夹内通过`hexo init`命令建站。完后就可以通过`hexo s`来启动站点，并通过<a href="#">localhost:4000</a>在本地查看。但是在本地的Blog就失去了它的意义，我们需要把它部署到服务器上。这里我们选用Github Pages来部署我们的博客。
+
+<!--more-->
 
 ### 部署到Github
 1. 创建Github仓库
@@ -29,7 +31,81 @@ tags:
 - 通过仓库的`Settings -> Secrets -> Add a new secret`菜单，添加一个新的Secret，Name可以自己取，这边用HEXO_DEPLOY_PRI，Value使用github-deploy-key文件的内容
 - 通过仓库的`Settings -> Deploy Keys -> Add Deploy Key`菜单，添加新的Deploy Key，Title可以自己取，这边用HEXO_DEPLOY_PUB，Key使用github-deploy-key.pub文件的内容，添加的时候记得勾选上Allow write access
 3. 添加部署配置
-在hexo站点根目录下依次创建`.github`, `workflows`文件夹，并在workflows文件夹中创建deploy.yml`，<a href="{% asset_path deploy.txt %}">点击查看</a>yml的内容
+在hexo站点根目录下依次创建`.github`, `workflows`文件夹，并在workflows文件夹中创建`deploy.yml`，复制下面内容到yml
+```
+name: auto_ci # Action的名字
+
+# 当推送到master分支的时候出发该Action
+on:
+  push:
+    branches:
+      - master
+
+# 环境变量设置
+env:
+  GIT_USER: cumtmaoyou #github账号
+  GIT_EMAIL: cumtxiaofeng@live.com #github邮箱
+  THEME_REPO: next-theme/hexo-theme-next #当前使用的Hexo的主题repo
+  THEME_BRANCH: master # 主题的repo分支名称
+  DEPLOY_REPO: cumtmaoyou/cumtmaoyou.github.io #自动部署到该repo
+  DEPLOY_BRANCH: autoci #自动部署的repo的分支名称
+
+# 任务列表
+jobs:
+  build:
+    name: Build on node ${{ matrix.node_version }} and ${{ matrix.os }} #编译的名称 matri.node_version和matrix.os引用的下方的的os和node_version的配置
+    runs-on: ubuntu-latest # 表明在ubuntu上编译
+    strategy:
+      matrix:
+        os: [ubuntu-latest] # 系统用最新的ubuntu
+        node_version: [16.x] # node用16.x版本
+
+    # 编译步骤
+    steps:
+      - name: Checkout # 首先是checkout该deploy.yml所在的仓库
+        uses: actions/checkout@v3
+
+      - name: Checkout theme repo # checkout主题仓库
+        uses: actions/checkout@v3
+        with:
+          repository: ${{ env.THEME_REPO }}
+          ref: ${{ env.THEME_BRANCH }}
+          path: themes/next # check到themes/next文件夹下，这个文件夹与第一步所check仓库的根目录的同级
+
+      - name: Checkout deploy repo #checkout部署仓库
+        uses: actions/checkout@v3
+        with:
+          repository: ${{ env.DEPLOY_REPO }}
+          ref: ${{ env.DEPLOY_BRANCH }}
+          path: .autoci #check到.autoci文件夹，这个文件夹与第一步所check仓库的根目录的同级
+
+      - name: Use Node.js ${{ matrix.node_version }} # 安装node
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node_version }}
+
+      - name: Configuration environment # 配置自动部署环境
+        env:
+          HEXO_DEPLOY_PRI: ${{secrets.HEXO_DEPLOY_PRI}}
+        run: |
+          sudo timedatectl set-timezone "Asia/Shanghai"
+          mkdir -p ~/.ssh/
+          echo "$HEXO_DEPLOY_PRI" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          git config --global user.name $GIT_USER
+          git config --global user.email $GIT_EMAIL
+      #          cp .config.next.yml themes/next/_config.yml #这边可以复制一些额外的自定义文件到主题
+      - name: Install dependencies # 执行node install
+        run: |
+          npm install
+
+      - name: Deploy hexo # 执行hexo的deploy命令
+        run: |
+          npm run deploy
+          
+```
+
 4. 修改Hexo的配置文件_config.yml
 ```
 deploy:
