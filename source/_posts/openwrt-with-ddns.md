@@ -31,9 +31,9 @@ date: 2022-05-13 11:53:59
 4. 查看 ddns 日志，发现 CURL 返回错误 28
 5. 找到日志里更新的 url，在浏览器里访问，发现更新正常
 6. ssh 到路由，ping 更新的 URL，发现正常 ping
-7. 找到日志里更新的命令行，用执行改命令，发现失败
-8. 移除--noproxy 参数，发现更新失败
-9. 移除--interface 参数，发现更新成功，那应该就是--interface 参数引起的
+7. 找到日志里更新的命令行，用执行该命令，发现失败
+8. 移除`--noproxy`参数，发现更新失败
+9. 移除`--interface`参数，发现更新成功，那应该就是`--interface`参数引起的
 
 _到这里大致知道是什么问题引起的了，接下来尝试找到解决方案_
 
@@ -41,7 +41,7 @@ _到这里大致知道是什么问题引起的了，接下来尝试找到解决�
 2. 安装了`ddns-script_no-ip_com`包，想看看有没有关于`--interface`的选项，但是安装后在 luci 界面的服务商列表里没找到 noip
 3. 尝试自己修改 ddns 的更新脚本，找到脚本所在位置，位于`/usr/lib/ddns`目录下
 4. 查看`update_no-ip_com.sh`，发现里面调用了`do_trasfer`函数
-5. 查看`update_dns_functions.sh`，查找`do_transfer`，查找`--interface`，找到后注释改行
+5. 查看`update_dns_functions.sh`，查找`do_transfer`，查找`--interface`，找到后注释该行
 6. 重启 ddns 服务，发现问题已经解决了
 
 整个过程大约花了 2 个小时，但是具体是哪里设置错误导致不能更新还是不太明白，也不愿意深究了，能正常工作就行。
